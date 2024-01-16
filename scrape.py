@@ -6,40 +6,44 @@ from selenium.webdriver import ActionChains
 import numpy as np
 import cv2
 
-driver = webdriver.Chrome()
-driver.get("https://www.google.com/")
-driver.get('https://mosdac.gov.in/live/index_one.php?url_name=india')
+while True:
 
-time.sleep(5)
+    driver = webdriver.Chrome()
+    driver.get("https://www.google.com/")
+    driver.get('https://mosdac.gov.in/live/index_one.php?url_name=india')
 
-button = driver.find_element(By.XPATH, '//*[@id="side_btn"]/table/tbody/tr/td[1]/button')
-button.click()
+    time.sleep(5)
 
-input_element = driver.find_element(By.XPATH, '//md-checkbox[@aria-label="TIR1 Count"]//following-sibling::input')
-input_element.send_keys(Keys.ARROW_RIGHT * 100)
-button = driver.find_element(By.XPATH, '//*[@id="side_btn"]/table/tbody/tr/td[1]/button')
-button.click()
-full_screen = driver.find_element(By.XPATH, '//*[@id="map"]/div/div[2]/div[7]/button')
-full_screen.click()
+    button = driver.find_element(By.XPATH, '//*[@id="side_btn"]/table/tbody/tr/td[1]/button')
+    button.click()
 
-time.sleep(5)
-driver.save_screenshot('screenshot.png')
-driver.quit()
+    input_element = driver.find_element(By.XPATH, '//md-checkbox[@aria-label="TIR1 Count"]//following-sibling::input')
+    input_element.send_keys(Keys.ARROW_RIGHT * 100)
+    button = driver.find_element(By.XPATH, '//*[@id="side_btn"]/table/tbody/tr/td[1]/button')
+    button.click()
+    full_screen = driver.find_element(By.XPATH, '//*[@id="map"]/div/div[2]/div[7]/button')
+    full_screen.click()
 
-img = cv2.imread('screenshot.png')
-lower_boundary = np.array([0, 100, 0]) 
-upper_boundary = np.array([100, 255, 100]) 
-mask = cv2.inRange(img, lower_boundary, upper_boundary)
-new_color = np.array([255, 255, 255]) 
-img[mask != 0] = new_color
+    time.sleep(5)
+    driver.save_screenshot('screenshot.png')
+    driver.quit()
 
-height, width = img.shape[:2]
-top = int(height / 3)
-left = int(width * (7/28))
-right = int(width - (width * (5/14)))
-bottom = height
+    img = cv2.imread('screenshot.png')
+    lower_boundary = np.array([0, 100, 0]) 
+    upper_boundary = np.array([100, 255, 100]) 
+    mask = cv2.inRange(img, lower_boundary, upper_boundary)
+    new_color = np.array([255, 255, 255]) 
+    img[mask != 0] = new_color
 
-img_cropped = img[top:bottom, left:right]
-cv2.imwrite('screenshot.png', img_cropped)
+    height, width = img.shape[:2]
+    top = int(height / 3)
+    left = int(width * (7/28))
+    right = int(width - (width * (5/14)))
+    bottom = height
+
+    img_cropped = img[top:bottom, left:right]
+    cv2.imwrite('screenshot.png', img_cropped)
+
+    time.sleep(30 * 60)
 
 
