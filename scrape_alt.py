@@ -23,8 +23,14 @@ while True:
 
     image_element = driver.find_element(By.XPATH, '//*[@id="images"]/img')
     src = image_element.get_attribute('src')
-    urllib.request.urlretrieve(src, "screenshot_alt.png")
+    try:
+        print("Trying")
+        urllib.request.urlretrieve(src, "screenshot_alt.png")
+    except Exception as e:
+        print("Done")
     driver.quit()
+    print("Sleeping")
+    time.sleep(30 * 60)
 
 
 
